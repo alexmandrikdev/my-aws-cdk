@@ -10,7 +10,6 @@ test('SQS Queue Created', () => {
   //   const stack = new MyAwsCdk.MyAwsCdkStack(app, 'MyTestStack');
   //     // THEN
   //   const template = Template.fromStack(stack);
-
   //   template.hasResourceProperties('AWS::SQS::Queue', {
   //     VisibilityTimeout: 300
   //   });
