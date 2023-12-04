@@ -11,6 +11,7 @@
   "rules": {
     "no-new": "off",
     "semi": ["error", "always"],
-    "@typescript-eslint/semi": ["error", "always"]
+    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/comma-dangle": ["error", "always-multiline"]
   }
 }

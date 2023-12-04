@@ -5,6 +5,7 @@
     "my-aws-cdk": "bin/my-aws-cdk.js"
   },
   "scripts": {
+    "prebuild": "npm install axios --prefix functions/image-processing/ --platform=linux --arch=x64",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
