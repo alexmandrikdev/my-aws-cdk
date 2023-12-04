@@ -2,7 +2,6 @@ import { RemovalPolicy, Stack, type StackProps } from 'aws-cdk-lib';
 import * as cdk from 'aws-cdk-lib';
 import { type Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -12,11 +11,6 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets';
 const DOMAIN_NAME = 'images.alexmandrik.dev';
 
 export class MyAwsCdkStack extends Stack {
-  private readonly CLOUDFLARE_API_URL: string = 'https://api.cloudflare.com/client/v4';
-  private readonly CLOUDFLARE_API_KEY = this.node.tryGetContext('cloudflareApiKey');
-  private readonly CLOUDFLARE_EMAIL = this.node.tryGetContext('cloudflareEmail');
-  private readonly CLOUDFLARE_ZONE_ID = this.node.tryGetContext('cloudflareZoneId');
-
   constructor (scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -50,23 +44,6 @@ export class MyAwsCdkStack extends Stack {
     // Output all name servers using Fn.join
     new cdk.CfnOutput(this, 'NameServers', {
       value: nameServers,
-    });
-
-    // Run a Lambda function to create the DNS records in Cloudflare
-    const cloudflareLambda = new lambda.Function(this, 'MyFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
-      code: lambda.Code.fromAsset('lib/lambda'),
-      bundling: {
-        nodeModules: ['axios'],
-      },
-      handler: 'index.handler',
-      environment: {
-        CLOUDFLARE_API_KEY: this.CLOUDFLARE_API_KEY,
-        CLOUDFLARE_EMAIL: this.CLOUDFLARE_EMAIL,
-        CLOUDFLARE_ZONE_ID: this.CLOUDFLARE_ZONE_ID,
-        DOMAIN_NAME,
-        nameServers,
-      },
     });
 
     // Create a certificate in ACM for the domain
